@@ -372,7 +372,7 @@ def train_stage2(args, labeled_trainloader, unlabeled_trainloader, val_loader, t
                     torch.log_softmax(logits_u_s[loss_mask], -1),
                     torch.softmax(logits_tgt[loss_mask].detach().data, -1),
                     reduction='none').sum(dim=1)
-                Lu = (weights[loss_mask] * kl_losses).mean()
+                Lu = (kl_losses).mean()
 
             # Cross Entropy Loss for Rotation Recognition
             inputs_r = inputs_r.to(args.device)
