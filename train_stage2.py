@@ -368,11 +368,10 @@ def train_stage2(args, labeled_trainloader, unlabeled_trainloader, val_loader, t
             if loss_mask.sum() == 0:
                 Lu = torch.zeros(1, dtype=torch.float).to(args.device)
             else:
-                kl_losses = F.kl_div(
+                Lu = F.kl_div(
                     torch.log_softmax(logits_u_s[loss_mask], -1),
                     torch.softmax(logits_tgt[loss_mask].detach().data, -1),
-                    reduction='none').sum(dim=1)
-                Lu = (kl_losses).mean()
+                    reduction='batchmean')
 
             # Cross Entropy Loss for Rotation Recognition
             inputs_r = inputs_r.to(args.device)
